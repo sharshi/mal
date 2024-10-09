@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using MvcMovie.Models;
 using Microsoft.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore;
+using Microsoft.AspNetCore.Hosting;
 
 namespace MvcMovie
 {
@@ -34,27 +35,20 @@ namespace MvcMovie
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddDbContext<MvcMovieContext>(options =>
-            options.UseMySql(Configuration.GetConnectionString("MovieContext")));
+            var connection = Configuration.GetConnectionString("MovieContext");
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddDbContext<MvcMovieContext>(options =>
+                options.UseMySql(connection, ServerVersion.AutoDetect(connection)));
+            services.AddMvc(opt => opt.EnableEndpointRouting = false);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
+            app.UseExceptionHandler("/Home/Error");
+            app.UseHsts();
 
-            // app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
