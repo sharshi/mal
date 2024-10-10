@@ -9,12 +9,12 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MvcMovie.Models;
+using Shafeh.Models;
 using Microsoft.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore;
 using Microsoft.AspNetCore.Hosting;
 
-namespace MvcMovie
+namespace Shafeh
 {
     public class Startup
     {
@@ -35,9 +35,9 @@ namespace MvcMovie
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            var connection = Configuration.GetConnectionString("MovieContext");
+            var connection = Configuration.GetConnectionString("ShafehContext");
 
-            services.AddDbContext<MvcMovieContext>(options =>
+            services.AddDbContext<ShafehContext>(options =>
                 options.UseMySql(connection, ServerVersion.AutoDetect(connection)));
             services.AddMvc(opt => opt.EnableEndpointRouting = false);
         }
@@ -56,7 +56,7 @@ namespace MvcMovie
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Movies}/{action=Index}/{id?}");
+                    template: "{controller=PlaceHolders}/{action=Index}/{id?}");
             });
         }
     }
