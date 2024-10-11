@@ -13,6 +13,7 @@ using Shafeh.Models;
 using Microsoft.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 
 namespace Shafeh
 {
@@ -39,7 +40,11 @@ namespace Shafeh
 
             services.AddDbContext<ShafehContext>(options =>
                 options.UseMySql(connection, ServerVersion.AutoDetect(connection)));
-            services.AddMvc(opt => opt.EnableEndpointRouting = false);
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddEntityFrameworkStores<ShafehContext>();
+
+            services.AddControllersWithViews();
+            services.AddRazorPages();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -51,13 +56,15 @@ namespace Shafeh
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
-            app.UseCookiePolicy();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapRazorPages();
             });
         }
     }
