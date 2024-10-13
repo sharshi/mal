@@ -1,12 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Shafeh.Models;
 
 namespace Shafeh.Models;
-public class ShafehContext : DbContext
+public class ShafehContext : IdentityDbContext
 {
     public ShafehContext(DbContextOptions<ShafehContext> options) : base(options)
     {
