@@ -1,18 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Shafeh.Models;
 using Microsoft.EntityFrameworkCore;
-using Pomelo.EntityFrameworkCore;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 
 namespace Shafeh
@@ -36,10 +28,9 @@ namespace Shafeh
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            var connection = Configuration.GetConnectionString("ShafehContext");
-
             services.AddDbContext<ShafehContext>(options =>
-                options.UseMySql(connection, ServerVersion.AutoDetect(connection)));
+                options.UseSqlite("Data Source=ShafehContext.db;Cache=Shared"));
+
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ShafehContext>();
 
