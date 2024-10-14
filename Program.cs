@@ -1,6 +1,14 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Shafeh.Models;
+using Shafeh.Services;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,16 +18,29 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
     options.MinimumSameSitePolicy = SameSiteMode.None;
 });
 
-// Add services to the container.
-var connectionString = "Data Source=ShafehContext.db;Cache=Shared";
+var connection = builder.Configuration.GetConnectionString("ShafehContext");
+
 builder.Services.AddDbContext<ShafehContext>(options =>
-    options.UseSqlite(connectionString));
+    options.UseMySql(connection, ServerVersion.AutoDetect(connection)));
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    // .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ShafehContext>();
+
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+
+builder.Services.AddTransient<IEmailSender, SendGridEmailSender>();
+builder.Services.Configure<SendGridEmailSenderOptions>(options =>
+{
+    options.ApiKey = builder.Configuration["ExternalProviders:SendGrid:ApiKey"];
+    options.SenderEmail = builder.Configuration["ExternalProviders:SendGrid:SenderEmail"];
+    options.SenderName = builder.Configuration["ExternalProviders:SendGrid:SenderName"];
+});
+
+builder.Services.AddAuthentication();
 
 var app = builder.Build();
 
@@ -41,6 +62,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>
@@ -50,4 +72,5 @@ app.UseEndpoints(endpoints =>
         pattern: "{controller=Home}/{action=Index}/{id?}");
     endpoints.MapRazorPages();
 });
+
 app.Run();

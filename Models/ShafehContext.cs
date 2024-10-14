@@ -10,5 +10,5 @@ public class ShafehContext : IdentityDbContext
 
     }
 
-    public DbSet<PlaceHolder> PlaceHolder { get; set; }
+    public DbSet<Kolel> Kolels { get; set; }
 }
