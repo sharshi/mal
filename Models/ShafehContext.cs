@@ -11,4 +11,6 @@ public class ShafehContext : IdentityDbContext
     }
 
     public DbSet<Kolel> Kolels { get; set; }
+    public DbSet<Person> Person { get; set; }
+    public DbSet<JoinRequest> JoinRequests { get; set; }
 }

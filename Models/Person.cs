@@ -12,6 +12,8 @@ public class Person
 
     public required string Name { get; set; }
 
+    public string? UserId { get; set; }
+
     public ICollection<PersonKolel> PersonKollels { get; set; } = new List<PersonKolel>();
 
     public ICollection<SignIn> SignIns { get; set; } = new List<SignIn>();

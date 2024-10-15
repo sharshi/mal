@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Shafeh.Models;
 
@@ -11,9 +12,11 @@ using Shafeh.Models;
 namespace ShafehApp.Migrations
 {
     [DbContext(typeof(ShafehContext))]
-    partial class ShafehContextModelSnapshot : ModelSnapshot
+    [Migration("20241014044138_JoinRequests")]
+    partial class JoinRequests
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

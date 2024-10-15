@@ -21,11 +21,16 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td>@item.Name</td>
+                <td>
+                    @Html.ActionLink(item.Name, "Details", "Kolel", new { id = item.Id }, null)
+                </td>
+                @if (User.IsInRole("Admin"))
+                {
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                     <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                 </td>
+                }
             </tr>
         }
     </tbody>
